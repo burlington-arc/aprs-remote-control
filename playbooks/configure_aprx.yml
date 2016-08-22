@@ -1,0 +1,21 @@
+
+# This playbook is used to configure aprx for testing the remote control system
+# on the designated aprx hosts
+#
+# To execute:
+#   ansible-playbook -i my-hosts configure_aprx.yml
+#
+# The 'hosts' file contains a sample that you should copy to 'my-hosts', then
+# edit.  It contains information and variables for the hosts you want to
+# apply this playbook to.
+
+# Copy 'hosts' to 'my-hosts' and then change the name 'raspberrypi' to whatever
+# hostname you want to build aprx on.  The '.gitignore' file has an entry such
+# that 'my-hosts' is not stored in the git repository.  Hence you can edit it
+# with wild abandon.
+
+---
+
+- hosts: aprx_hosts
+  roles:
+    - aprx_config

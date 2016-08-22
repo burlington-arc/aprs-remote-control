@@ -1,0 +1,14 @@
+{
+  "name": "tcp-kiss-monitor",
+  "version": "1.0.0",
+  "description": "A utility to act as a tcp-device KISS tnc and print out what aprx sends in.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "utils-for-aprs": "^1.0.0"
+  }
+}

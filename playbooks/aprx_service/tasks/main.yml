@@ -1,0 +1,12 @@
+# This role manages the configuration of aprx.
+# We assume that aprx is already installed and the configuration goes into
+# /etc/aprx.conf
+
+- name: Make sure we have the local systemd directory
+  file: path=/usr/local/lib/systemd/system state=directory
+
+- name: Setup systemd service unit for aprx
+  template: src=aprx.service dest=/usr/local/lib/systemd/system
+
+- name: Restart aprx
+  systemd: daemon_reload=yes name=aprx enabled=yes state=restarted

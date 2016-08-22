@@ -1,0 +1,12 @@
+
+[Unit]
+Description=Monitor and gateway radio amateur APRS radio network datagrams
+
+[Service]
+ExecStart=/sbin/aprx
+ExecReload=/sbin/aprx
+Restart=always
+Type=forking
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,44 @@
+
+---
+# - name: Install development libraries for aprx
+# yum:  name={{ item }} state=present
+# with_items:
+#   - some-library
+
+- name: add group "aprxd"
+  group: name=aprxd
+
+- name: add user "aprxd"
+  user: name=aprxd group=aprxd home=/usr/share/aprxd createhome=no
+
+- name: Download aprx sources
+  get_url: url=http://thelifeofkenneth.com/aprx/release/aprx-2.8.2.tar.gz dest=/opt/aprx-2.8.2.tar.gz
+
+- name: Extract archive
+  command: chdir=/usr/share /bin/tar xvf /opt/aprx-2.8.2.tar.gz -C /opt/ creates=/opt/aprx-2.8.2
+
+# This makes /usr/share/aprx be a link to the current version of aprx.
+# The folder under /opt includes the actual version number.
+- name: Symlink install directory
+  file: src=/opt/aprx-2.8.2 path=/usr/share/aprx state=link
+
+- name: Change ownership of aprx installation
+  file: path=/usr/share/aprx/ owner=aprxd group=aprxd state=directory recurse=yes
+
+- name: Run the configure tool
+  shell: chdir=/usr/share/aprx ./configure --with-embedded --with-pthread
+  become_user: aprxd
+  become: true
+
+- name: Make aprx clean
+  shell: chdir=/usr/share/aprx make clean
+  become_user: aprxd
+  become: true
+
+- name: Make aprx
+  shell: chdir=/usr/share/aprx make
+  become_user: aprxd
+  become: true
+
+- name: Install aprx
+  shell: chdir=/usr/share/aprx make install

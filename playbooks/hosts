@@ -1,0 +1,17 @@
+
+[all]
+raspberrypi
+
+[all:vars]
+ansible_become=true
+ansible_become_method='sudo'
+ansible_become_user='root'
+ansible_user='pi'
+kiss_tnc_device='/dev/ttyUSB0'
+kiss_tnc_baudrate='1200'
+mycall='VA3TSK'
+rc_host='192.168.1.105'
+rc_port=3001
+
+[aprx_hosts]
+raspberrypi

@@ -1,0 +1,9 @@
+# This role manages the configuration of aprx.
+# We assume that aprx is already installed and the configuration goes into
+# /etc/aprx.conf
+
+- name: Create the aprx config file
+  template: src=aprx.conf dest=/etc/aprx.conf
+
+- name: Create /var/log/aprx
+  file: path='/var/log/aprx' owner=aprxd group=aprxd mode='ug=rwx,o=rx' state=directory

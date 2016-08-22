@@ -1,0 +1,3 @@
+---
+- name: restart aprx
+  systemd: daemon_reload=yes name=aprx state=restarted
