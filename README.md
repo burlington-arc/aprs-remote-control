@@ -42,7 +42,8 @@ receive the same message more than once.
 Remote Context
 --------------
 
-As it stands, the remote machine is a digipeater/IGate that runs APRX as its
+As it stands, the remote machine is a digipeater/IGate that runs APRX on a
+Raspberry Pi as its
 IGate software.  It is connected via a KISS modem to an FT2400 radio tuned to the
 APRS frequency.
 
@@ -69,3 +70,25 @@ received from this interface to its internal digipeater, which sends the packets
 out to the normal RF interface.
 
 (Insert system diagram here...)
+
+Programming Languages and Tools
+-------------------------------
+
+We already have playbooks and roles written for Ansible that configure the
+digipeater pi and other resources.  So Ansible is available to us.
+
+Languages - JavaScript on Node and Python seem to be the prime contenders.
+Either choice will run on the Raspberry pi and pretty much any 'local' environment
+that we're likely to use (i.e. Windows or Linux).
+
+Development, Packaging and Deployment
+------------------------
+
+Both the local and remote contexts should be packaged for easy deployment.  For
+the remote context, the remote control system should be deployed automatically
+using Ansible, as is the rest of the configuration (well really, the APRX
+configuration _is_ the prime thing that we're currently installing).  This is critical
+for long-term support, so that the remote environment can be duplicated and maintained
+by different people as time goes by.
+
+All code will be in source control.  Looks like GitHub is the repository of record.
