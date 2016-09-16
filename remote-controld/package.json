@@ -1,0 +1,22 @@
+{
+  "name": "remote-controld",
+  "version": "1.0.0",
+  "description": "Remote Control Daemon for APRS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aprs",
+    "remote",
+    "control"
+  ],
+  "author": "Burlington Amateur Radio Club",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "utils-for-aprs": "^1.0.1"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.0"
+  }
+}

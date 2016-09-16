@@ -39,6 +39,8 @@ be repeatedly sent by the sender until the receiver's acknowledgement is heard.
 So it's perfectly normal to
 receive the same message more than once.
 
+Maybe, only accept APR commands when the internet is down.?
+
 Remote Context
 --------------
 
