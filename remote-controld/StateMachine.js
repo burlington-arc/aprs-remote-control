@@ -1,21 +1,30 @@
 
-module.exports=function(stateDescriptions, initialState) {
-  var machine={};
+var util=require('util');
 
-  // Create the machine...
+var EventEmitter=require('events');
+
+
+var StateMachine=function(stateDescriptions, initialState) {
+  //console.log("Initializing a new StateMachine...");
+  //console.log("stateDescriptions=" + JSON.stringify(stateDescriptions));
+  // Create the machine (this)
   // Go through the states, and create the list of events.
-  machine.events={};
+  var events={};
   for(var stateName in stateDescriptions) {
     for (event in stateDescriptions[stateName]) {
-      if(!machine.events[event]) {
-        machine.events[event]=[];
+      if(!events[event]) {
+        events[event]=[];
       }
     }
   }
-  machine.events=Object.keys(machine.events);
+  events=Object.keys(events);
+  //console.log("this.events=" + JSON.stringify(events));
+  var machine=this;
+
   // Now put in a function in the main object for every event.
-  machine.events.forEach(function(eventName) {
+  events.forEach(function(eventName) {
     machine[eventName]=function() {
+      // console.log("Creating event " + eventName);
       /* The process is:
         - For the event (method) we're running, lookup the transition function
         on the current state object and run it.  The transition function sets
@@ -29,9 +38,11 @@ module.exports=function(stateDescriptions, initialState) {
         If the user-supplied state description doesn't specify a transition for
         a given event, then we'll throw an error.
       */
-      //console.log("event '" + eventName + "', args=" + JSON.stringify(arguments));
+      console.log("event '" + eventName + "', args=" + JSON.stringify(arguments));
+      console.log("...before transition, state=" + machine.currentState.name);
       var transitionFunc=machine.currentState[eventName];
       transitionFunc.apply(machine,arguments);
+      console.log("...after transition, state=" + machine.currentState.name);
     };
   });
 
@@ -51,20 +62,20 @@ module.exports=function(stateDescriptions, initialState) {
 
   // Now fill in the events.
   for (var stateName in stateDescriptions) {
-    var newState=machine[stateName];
+    var newState=this[stateName];
     machine[stateName]=newState;
     var currentState=machine[stateName];
     var stateDescription=stateDescriptions[stateName];
-    machine.events.forEach(function(eventName) {
+    events.forEach(function(eventName) {
       var eventDescription=stateDescription[eventName];
       if(eventDescription!=undefined) {
         if (typeof eventDescription=='string') {
         var nextState=machine[eventDescription];
           if (nextState != currentState) {
             newState[eventName]=function() {
-              currentState.onExit();
+              currentState.onExit.call(machine);
               machine.currentState=nextState;
-              nextState.onEntry();
+              nextState.onEntry.call(machine);
             };
           } else {
             newState[eventName]=nop;
@@ -77,14 +88,14 @@ module.exports=function(stateDescriptions, initialState) {
           var transitionFunction=eventDescription[1];
           if (nextState != currentState) {
             newState[eventName]=function() {
-              currentState.onExit();
+              currentState.onExit.call(machine);
               machine.currentState=nextState;
               /*
               console.log("Calling transition function with args=" +
                 JSON.stringify(arguments));
               */
               transitionFunction.apply(machine,arguments);
-              nextState.onEntry();
+              nextState.onEntry.call(machine);
             };
           } else {
             newState[eventName]=function() {
@@ -111,8 +122,11 @@ module.exports=function(stateDescriptions, initialState) {
   // Set the initial state
   /*
   console.log('Initial state is ' + initialState);
-  console.log('machine[initialState] is ' + JSON.stringify(machine[initialState]));
+  console.log('this[initialState] is ' + JSON.stringify(this[initialState]));
   */
-  machine.currentState=machine[initialState];
-  return machine;
+  machine.currentState=this[initialState];
 }
+
+util.inherits(StateMachine, EventEmitter);
+
+module.exports=StateMachine;
