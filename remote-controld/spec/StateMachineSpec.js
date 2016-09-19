@@ -1,8 +1,10 @@
 
+var EventEmitter=require('events');
+
 describe("The StateMachine generator", function() {
-  var generator=require('../state-machine.js');
+  var StateMachine=require('../StateMachine.js');
   it('exists in a module', function() {
-    expect(typeof(generator)).toBe('function');
+    expect(typeof(StateMachine)).toBe('function');
   });
 
   var trBWasCalled=false;
@@ -39,19 +41,23 @@ describe("The StateMachine generator", function() {
   };
   var machine=null;
   beforeEach(function() {
-    machine=generator(states,'A');
+    machine=new StateMachine(states,'A');
     //console.log("Created machine is:");
     //console.log(machine);
   });
 
+  it('creates a machine that inherits from StateMachine', function() {
+      console.log("machine's prototype is " + JSON.stringify(machine.prototype));
+      expect(machine instanceof StateMachine).toBe(true);
+  });
+
+  it('creates a machine that inherits from EventEmitter', function() {
+      console.log("machine's prototype is " + JSON.stringify(machine.prototype));
+      expect(machine instanceof EventEmitter).toBe(true);
+  });
 
   it('creates an object when we define states', function() {
     expect(typeof(machine)).toBe('object');
-  });
-
-  it('creates a list of events', function() {
-    expect(machine.events).toBeDefined();
-    expect(machine.events).toContain('go');
   });
 
   it('creates an object with a "go" method when we hand it a state table',

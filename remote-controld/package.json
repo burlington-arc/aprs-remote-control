@@ -14,6 +14,7 @@
   "author": "Burlington Amateur Radio Club",
   "license": "Apache-2.0",
   "dependencies": {
+    "serialport": "^4.0.1",
     "utils-for-aprs": "^1.0.1"
   },
   "devDependencies": {
